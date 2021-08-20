@@ -57,6 +57,7 @@ public class ServerApplication implements Application {
         dbReader.readDBEntitiesTable();
 
         this.dbWriter = new DBWriter(dbConnector, collectionManager);
+
         this.serverConnectionManager = new ServerConnectionManager();
         this.serverRequestReceiver = new ServerRequestReceiver(serverConnectionManager);
         this.serverResponseSender = new ServerResponseSender(serverConnectionManager, outputManager);
