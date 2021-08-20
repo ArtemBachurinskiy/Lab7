@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.8">
+      <module name="Lab7.Lab7_Client.main" target="1.8" />
+      <module name="Lab7.Lab7_Client.test" target="1.8" />
+      <module name="Lab7.Lab7_General.main" target="1.8" />
+      <module name="Lab7.Lab7_General.test" target="1.8" />
+      <module name="Lab7.Lab7_Server.main" target="1.8" />
+      <module name="Lab7.Lab7_Server.test" target="1.8" />
+      <module name="Lab7.main" target="1.8" />
+      <module name="Lab7.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

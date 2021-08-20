@@ -1,0 +1,4 @@
+rootProject.name = 'untitled'
+include 'Lab7_Client'
+include 'Lab7_General'
+include 'Lab7_Server'
