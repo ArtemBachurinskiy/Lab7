@@ -1,63 +1,50 @@
 package commands;
 
 import collection.CollectionManager;
+import database.DBWriter;
+import entities.Movie;
 import request.Request;
 import response.Response;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Класс команды remove_lower.
  * Описание команды: удалить из коллекции все элементы, меньшие, чем заданный
- * Чтобы узнать, какие элементы мы удалим, нужно сначала использовать команду show.
+ * (удаляются те элементы, id которых меньше, чем заданный)
  */
-public class RemoveLowerCommand implements ServerCommand {
-    private CollectionManager collectionManager;
-
+public class RemoveLowerCommand extends RemoveGreaterCommand implements ServerCommand {
     /**
      * @param collectionManager менеджер коллекции
      */
-    RemoveLowerCommand(CollectionManager collectionManager) {
-        this.collectionManager = collectionManager;
+    RemoveLowerCommand(CollectionManager collectionManager, DBWriter dbWriter) {
+        super(collectionManager, dbWriter);
     }
 
-    //todo: lambda
     @Override
-    public Response execute(Request request) {
-        // удалить из коллекции все элементы, меньшие, чем заданный,
-        // т.е. ниже него по списку (узнать какие это эл-ты мы сможем выполнив команду show())
-        StringBuilder message = new StringBuilder();
-
-        if (!request.getArgument().isEmpty())
-        {
-            Set<String> setToRetain = collectionManager.getCollectionKeySet();
-            boolean found = false;
-            boolean removed = false;
-
-            Iterator<String> iterator = setToRetain.iterator();
-            while (iterator.hasNext()) {
-                String string = iterator.next();
-                if (request.getArgument().equals(string))
-                    found = true;
-                if (found && !request.getArgument().equals(string)) {
-                    iterator.remove();
-                    removed = true;
-                }
+    Set<Integer> composeIdsToDelete(Integer id) {
+        Set<Integer> idsToDelete = new HashSet<>();
+        ArrayList<Map.Entry<String, Movie>> elements = collectionManager.getCollectionElements();
+        for (Map.Entry<String, Movie> element : elements) {
+            if (element.getValue().getId() < id) {
+                idsToDelete.add(element.getValue().getId());
             }
-            if(!found)
-                message.append("В коллекции нет элемента с ключом \'")
-                        .append(request.getArgument())
-                        .append("\'!");
-            if(removed)
-                message.append("Элементы успешно удалены!");
         }
-        else
-            message.append("Необходимо задать аргумент!");
-
-        return new Response(request.getCommand(), message.toString());
+        return idsToDelete;
     }
 
+    @Override
+    void removeCorrespondingIds(Integer id) {
+        Iterator<Map.Entry<String, Movie>> iterator = collectionManager.getCollectionElements().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Movie> element = iterator.next();
+            if (element.getValue().getId() < id) {
+                collectionManager.deleteMovieById(element.getValue().getId());
+            }
+        }
+    }
+
+    @Override
     public String getDescription() {
         return "remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный";
     }

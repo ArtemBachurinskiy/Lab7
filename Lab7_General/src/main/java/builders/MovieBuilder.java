@@ -7,6 +7,7 @@ import entities.MovieGenre;
 import java.io.IOException;
 
 public interface MovieBuilder {
+    String buildName() throws IOException;
     Coordinates buildCoordinates() throws IOException;
     Integer buildCoordinateX() throws IOException;
     Double buildCoordinateY();
@@ -21,4 +22,6 @@ public interface MovieBuilder {
      * @return новый объект типа Movie
      */
     Movie buildMovie(int id, String name) throws IOException;
+
+    Movie buildMovie(int id) throws IOException;
 }

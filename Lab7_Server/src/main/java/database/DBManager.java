@@ -3,7 +3,6 @@ package database;
 import output.OutputManager;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -45,20 +44,6 @@ public class DBManager {
             statement.execute(create_sequence);
         } catch (SQLException e) {
             outputManager.printlnErrorMessage("Не удалось создать таблицу...");
-        }
-    }
-
-    public int generateSequenceId() {
-        final String nextval = "SELECT nextval('id_sequence');";
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(nextval);
-            return Integer.parseInt(rs.getString("ID"));
-        } catch (SQLException e) {
-            outputManager.printlnErrorMessage("Не удалось сгенерировать новый id...");
-            //todo: если не удалось сгенерировать id, то клиенту нужно отправлять сообщение о том,
-            // что не удалось вставить movie в коолекцию
-            return 0;
         }
     }
 }

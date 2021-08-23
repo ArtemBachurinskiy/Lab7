@@ -18,6 +18,10 @@ public class ConsoleMovieBuilder implements MovieBuilder {
     }
 
     @Override
+    public String buildName() throws IOException {
+        return movieReader.readName();
+    }
+    @Override
     public Coordinates buildCoordinates() throws IOException {
         return new Coordinates(buildCoordinateX(), buildCoordinateY());
     }
@@ -52,6 +56,11 @@ public class ConsoleMovieBuilder implements MovieBuilder {
     @Override
     public Movie buildMovie(int id, String name) throws IOException {
         return new Movie(id, name, buildCoordinates(), buildCreationDate(), buildOscarsCount(),
+                buildGoldenPalmCount(), buildTagline(), buildGenre(), personBuilder.buildPerson());
+    }
+    @Override
+    public Movie buildMovie(int id) throws IOException {
+        return new Movie(id, buildName(), buildCoordinates(), buildCreationDate(), buildOscarsCount(),
                 buildGoldenPalmCount(), buildTagline(), buildGenre(), personBuilder.buildPerson());
     }
 }

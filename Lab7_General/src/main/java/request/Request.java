@@ -32,9 +32,4 @@ public class Request implements Serializable {
     public Movie getMovie() {
         return movie;
     }
-
-    public Movie generateMovie (int id) {
-        movie.setId(id);
-        return movie;
-    }
 }

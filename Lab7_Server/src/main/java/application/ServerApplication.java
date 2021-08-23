@@ -1,9 +1,7 @@
 package application;
 
 import collection.CollectionManager;
-import commands.SaveCommand;
 import commands.ServerCommandManager;
-import commands.ServerInvoker;
 import connect.ServerConnectionManager;
 import database.DBConnector;
 import database.DBManager;
@@ -32,7 +30,6 @@ public class ServerApplication implements Application {
     private ServerResponseSender serverResponseSender;
     private ServerCommandManager serverCommandManager;
     private OutputManager outputManager;
-    private DBWriter dbWriter;
     private boolean shutdown;
 
     /**
@@ -56,12 +53,12 @@ public class ServerApplication implements Application {
         DBReader dbReader = new DBReader(dbConnector, collectionManager, outputManager);
         dbReader.readDBEntitiesTable();
 
-        this.dbWriter = new DBWriter(dbConnector, collectionManager);
+        DBWriter dbWriter = new DBWriter(dbConnector);
 
         this.serverConnectionManager = new ServerConnectionManager();
         this.serverRequestReceiver = new ServerRequestReceiver(serverConnectionManager);
         this.serverResponseSender = new ServerResponseSender(serverConnectionManager, outputManager);
-        this.serverCommandManager = new ServerCommandManager(this, collectionManager, dbWriter, dbConnector);
+        this.serverCommandManager = new ServerCommandManager(this, outputManager, collectionManager, dbWriter, dbReader, dbConnector);
         loop();
     }
 
@@ -70,7 +67,8 @@ public class ServerApplication implements Application {
      */
     @Override
     public void loop() {
-        outputManager.printlnMessage("Введите серверную команду: ");
+        outputManager.printlnMessage("Введите серверную команду (доступны: " + serverCommandManager.getCommandsOfServerNames() + "):");
+
         while (!shutdown) {
             serverConnectionManager.acceptConnection();
 
@@ -88,9 +86,6 @@ public class ServerApplication implements Application {
             } catch (IOException ignored) {
             }
         }
-
-        ServerInvoker invoker = new ServerInvoker(new SaveCommand(dbWriter));
-        outputManager.printlnMessage(invoker.executeCommand(new Request("save")).getMessage());
         serverConnectionManager.closeConnection();
         //todo: нужно ли закрывать соединение с БД?
     }

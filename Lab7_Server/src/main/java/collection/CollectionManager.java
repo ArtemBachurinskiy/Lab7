@@ -2,13 +2,9 @@ package collection;
 
 import database.DBManager;
 import entities.Movie;
-import request.Request;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -23,14 +19,6 @@ public class CollectionManager {
         this.dbManager = dbManager;
         Movies = new Hashtable<>();
         creationDate = LocalDate.now();
-    }
-
-    /**
-     * Метод, который помещает новый элемент в коллекцию.
-     * @param request запрос, из которого берётся ключ и объект типа Movie.
-     */
-    public void insertMovie(Request request) {
-        Movies.put(request.getArgument(), request.generateMovie(dbManager.generateSequenceId()));
     }
 
     /**
@@ -64,6 +52,7 @@ public class CollectionManager {
     }
 
     /**
+     * Важно! Метод возвращает не саму коллекцию Movies, а только лишь её элементы.
      * @return ArrayList элементов, хранящихся в коллекции.
      */
     public ArrayList<Map.Entry<String, Movie>> getCollectionElements () {
@@ -85,33 +74,20 @@ public class CollectionManager {
     }
 
     /**
-     * Автоматически генерирует уникальное поле id.
-     * Новый id всегда на 1 больше (+1), чем максимальное id в коллекции.
-     * @return сгенерированный id
-     */
-    private int generateFreeId() {
-        Integer id = 0;
-        Set<String> set = Movies.keySet();
-        for (String string : set) {
-            if (id < Movies.get(string).getId())
-                id = Movies.get(string).getId();
-        }
-        id++;
-        return id;
-    }
-
-    /**
      * Удаляет объект из коллекции по его ключу.
      * @param key ключ элемента, который нужно удалить из коллекции
-     * @return true если элемент успешно удалён,
-     *         false в противном случае.
      */
-    public boolean remove_key(String key) {
-        if (Movies.containsKey(key)) {
-            Movies.remove(key);
-            return true;
-        } else
-            return false;
+    public void remove_key(String key) {
+        Movies.remove(key);
+    }
+
+    public void deleteMovieById(int id) {
+        Iterator<Map.Entry<String, Movie>> iterator = Movies.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Movie> entry = iterator.next();
+            if (entry.getValue().getId().equals(id))
+                iterator.remove();
+        }
     }
 
     /**
@@ -119,5 +95,11 @@ public class CollectionManager {
      */
     public Stream<Movie> getMoviesStream() {
         return Movies.values().stream();
+    }
+
+    public Movie getMovieByKey(String key) {
+        if (Movies.containsKey(key))
+            return Movies.get(key);
+        return null;
     }
 }

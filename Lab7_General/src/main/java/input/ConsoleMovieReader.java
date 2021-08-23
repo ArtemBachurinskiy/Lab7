@@ -25,6 +25,25 @@ public class ConsoleMovieReader implements MovieReader {
     }
 
     @Override
+    public String readName() {
+        String name;
+        outputManager.printlnMessage("Введите поле name: ");
+        while (true) {
+            try {
+                name = inputManager.readLine();
+                name = name.trim();
+                if (name.isEmpty()) {
+                    outputManager.printlnErrorMessage("Полю name не может быть пустой строкой! Повторите ввод.");
+                    continue;
+                }
+                break;
+            }
+            catch (IOException e) {}
+        }
+        return name;
+    }
+
+    @Override
     public Integer readCoordinateX(){
         Integer x;
         outputManager.printlnMessage("Введите координату x: ");

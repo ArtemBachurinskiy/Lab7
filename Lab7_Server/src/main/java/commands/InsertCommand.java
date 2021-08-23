@@ -1,6 +1,9 @@
 package commands;
 
 import collection.CollectionManager;
+import database.DBReader;
+import database.DBWriter;
+import entities.Movie;
 import request.Request;
 import response.Response;
 
@@ -10,24 +13,32 @@ import response.Response;
  */
 public class InsertCommand implements ServerCommand {
     private CollectionManager collectionManager;
+    private DBWriter dbWriter;
+    private DBReader dbReader;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
-    InsertCommand (CollectionManager collectionManager) {
+    InsertCommand (CollectionManager collectionManager, DBWriter dbWriter, DBReader dbReader) {
         this.collectionManager = collectionManager;
+        this.dbWriter = dbWriter;
+        this.dbReader = dbReader;
     }
 
     @Override
     public Response execute(Request request) {
-        StringBuilder message = new StringBuilder();
+        String message;
         if (!request.getArgument().isEmpty()) {
-            collectionManager.insertMovie(request);
-            message.append("Элемент успешно добавлен!");
+            boolean inserted = dbWriter.insertEntityIntoDB(request.getMovie());
+            if (inserted) {
+                message = "Объект успешно добавлен в БД! БД и коллекция синхронизированы.";
+                Movie movie = dbReader.getMovieWithMaxId();
+                if (movie != null)
+                    collectionManager.insertMovie(request.getArgument(), movie);
+            }
+            else
+                message = "Не удалось добавить объект в БД...";
         }
         else
-            message.append("Необходимо задать аргумент!");
-        return new Response(request.getCommand(), message.toString());
+            message = "Необходимо задать аргумент!";
+        return new Response(request.getCommand(), message);
     }
 
     public String getDescription() {

@@ -65,8 +65,10 @@ public class ClientCommandManager {
         else {
             if (clientConnectionManager.connectionIsEstablished()) {
                 Movie movie = null;
-                if (command.equals("insert") || command.equals("update"))
+                if (command.equals("insert"))
                     movie = movieBuilder.buildMovie(0, argument);
+                if (command.equals("update"))
+                    movie = movieBuilder.buildMovie(Integer.parseInt(argument));
                 if (clientRequestSender.sendRequestToServer(clientRequestSender.createRequest(command, argument, movie))) {
                     Response response = clientResponseReceiver.receiveResponseFromServer();
                     if (response != null)

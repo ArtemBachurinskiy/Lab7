@@ -33,27 +33,65 @@ public class DBReader {
         try {
             ResultSet rs = statement.executeQuery(select);
             while (rs.next()) {
-                Integer id = Integer.parseInt(rs.getString("ID"));
-                String name = rs.getString("NAME");
-                Integer x = Integer.parseInt(rs.getString("COORDINATE_X"));
-                Double y = Double.parseDouble(rs.getString("COORDINATE_Y"));
-                LocalDateTime creationDate = LocalDateTime.parse(rs.getString("CREATION_DATE"));
-                int oscarsCount = Integer.parseInt(rs.getString("OSCARS_COUNT"));
-                long goldenPalmCount = Long.parseLong(rs.getString("GOLDEN_PALM_COUNT"));
-                String tagline = rs.getString("TAGLINE");
-                MovieGenre genre = MovieGenre.valueOf(rs.getString("GENRE"));
-                String operator_name = rs.getString("PERSON_NAME");
-                ZonedDateTime birthday = ZonedDateTime.parse(rs.getString("PERSON_BIRTHDAY"));
-                Integer weight = Integer.parseInt(rs.getString("PERSON_WEIGHT"));
-                String passportID = rs.getString("PERSON_PASSPORT_ID");
-                Color hairColor = Color.valueOf(rs.getString("PERSON_HAIR_COLOR"));
-
-                Person operatorFromDB = new Person(operator_name, birthday, weight, passportID, hairColor);
-                Movie movieFromDB = new Movie(id, name, new Coordinates(x,y), creationDate, oscarsCount, goldenPalmCount, tagline, genre, operatorFromDB);
-                collectionManager.insertMovie(name, movieFromDB);
+                Movie movie = parseRsToMovie(rs);
+                if (movie != null)
+                    collectionManager.insertMovie(movie.getName(), movie);
             }
         } catch (SQLException e) {
             outputManager.printlnErrorMessage("Не удалось прочитать содержимое таблицы базы данных...");
+        }
+    }
+
+    public Movie getMovieWithMaxId() {
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM MOVIES WHERE ID = (SELECT MAX(ID) FROM MOVIES)");
+            if (rs.next()) {
+                return parseRsToMovie(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e){
+            return null;
+        }
+    }
+
+//    public Movie getMovieById(int id) {
+//        try {
+//            statement = connection.createStatement();
+//            ResultSet rs = statement.executeQuery("SELECT * FROM MOVIES WHERE ID = '" + id + "';");
+//            if (rs.next()) {
+//                return parseRsToMovie(rs);
+//            } else {
+//                return null;
+//            }
+//        } catch (SQLException e){
+//            return null;
+//        }
+//    }
+
+    private Movie parseRsToMovie(ResultSet rs) {
+        try {
+            Integer id = Integer.parseInt(rs.getString("ID"));
+            String name = rs.getString("NAME");
+            Integer x = Integer.parseInt(rs.getString("COORDINATE_X"));
+            Double y = Double.parseDouble(rs.getString("COORDINATE_Y"));
+            LocalDateTime creationDate = LocalDateTime.parse(rs.getString("CREATION_DATE"));
+            int oscarsCount = Integer.parseInt(rs.getString("OSCARS_COUNT"));
+            long goldenPalmCount = Long.parseLong(rs.getString("GOLDEN_PALM_COUNT"));
+            String tagline = rs.getString("TAGLINE");
+            MovieGenre genre = MovieGenre.valueOf(rs.getString("GENRE"));
+            String operator_name = rs.getString("PERSON_NAME");
+            ZonedDateTime birthday = ZonedDateTime.parse(rs.getString("PERSON_BIRTHDAY"));
+            Integer weight = Integer.parseInt(rs.getString("PERSON_WEIGHT"));
+            String passportID = rs.getString("PERSON_PASSPORT_ID");
+            Color hairColor = Color.valueOf(rs.getString("PERSON_HAIR_COLOR"));
+
+            Person operator = new Person(operator_name, birthday, weight, passportID, hairColor);
+            return new Movie(id, name, new Coordinates(x,y), creationDate, oscarsCount, goldenPalmCount, tagline, genre, operator);
+        }
+        catch (SQLException e) {
+            return null;
         }
     }
 }
