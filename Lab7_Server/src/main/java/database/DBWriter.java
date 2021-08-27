@@ -3,8 +3,10 @@ package database;
 import entities.Movie;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.Set;
 
 public class DBWriter {
@@ -16,7 +18,7 @@ public class DBWriter {
     }
 
     public boolean clearDBEntitiesTable() {
-        final String delete = "DELETE FROM MOVIES;";
+        final String delete = "DELETE FROM movies;";
         try {
             statement = connection.createStatement();
             statement.execute(delete);
@@ -26,9 +28,9 @@ public class DBWriter {
         }
     }
 
-    public boolean insertEntityIntoDB(Movie movie) {
+    public boolean insertEntityIntoDB(Movie movie, String username) {
         String insert =
-                "INSERT INTO MOVIES VALUES (" +
+                "INSERT INTO movies VALUES (" +
                     "nextval('id_sequence'), '" +
                     movie.getName() + "', '" +
                     movie.getCoordinates().getX() + "', '" +
@@ -42,7 +44,8 @@ public class DBWriter {
                     movie.getOperator().getBirthday() + "', '" +
                     movie.getOperator().getWeight() + "', '" +
                     movie.getOperator().getPassportID() + "', '" +
-                    movie.getOperator().getHairColor() +
+                    movie.getOperator().getHairColor() + "', '" +
+                        username +
                     "');";
         try {
             statement = connection.createStatement();
@@ -55,23 +58,23 @@ public class DBWriter {
 
     public boolean updateEntityOfDB(Integer id, Movie movie) {
         String update =
-                "UPDATE MOVIES " +
+                "UPDATE movies " +
                         "SET " +
-                        "NAME = '" + movie.getName() + "', " +
-                        "COORDINATE_X = '" + movie.getCoordinates().getX() + "', " +
-                        "COORDINATE_Y = '" + movie.getCoordinates().getY() + "', " +
-                        "CREATION_DATE = '" + movie.getCreationDate() + "', " +
-                        "OSCARS_COUNT = '" + movie.getOscarsCount() + "', " +
-                        "GOLDEN_PALM_COUNT = '" + movie.getGoldenPalmCount() + "', " +
-                        "TAGLINE = '" + movie.getTagline() + "', " +
-                        "GENRE = '" + movie.getGenre() + "', " +
-                        "PERSON_NAME = '" + movie.getOperator().getName() + "', " +
-                        "PERSON_BIRTHDAY = '" + movie.getOperator().getBirthday() + "', " +
-                        "PERSON_WEIGHT = '" + movie.getOperator().getWeight() + "', " +
-                        "PERSON_PASSPORT_ID = '" + movie.getOperator().getPassportID() + "', " +
-                        "PERSON_HAIR_COLOR = '" + movie.getOperator().getHairColor() + "' " +
+                        "name = '" + movie.getName() + "', " +
+                        "coordinate_x = '" + movie.getCoordinates().getX() + "', " +
+                        "coordinate_y = '" + movie.getCoordinates().getY() + "', " +
+                        "creation_date = '" + movie.getCreationDate() + "', " +
+                        "oscars_count = '" + movie.getOscarsCount() + "', " +
+                        "golden_palm_count = '" + movie.getGoldenPalmCount() + "', " +
+                        "tagline = '" + movie.getTagline() + "', " +
+                        "genre = '" + movie.getGenre() + "', " +
+                        "person_name = '" + movie.getOperator().getName() + "', " +
+                        "person_birthday = '" + movie.getOperator().getBirthday() + "', " +
+                        "person_weight = '" + movie.getOperator().getWeight() + "', " +
+                        "person_passport_id = '" + movie.getOperator().getPassportID() + "', " +
+                        "person_hair_color = '" + movie.getOperator().getHairColor() + "' " +
                         "WHERE " +
-                        "ID = '" + id + "';";
+                        "id = '" + id + "';";
         try {
             statement = connection.createStatement();
             statement.execute(update);
@@ -82,7 +85,7 @@ public class DBWriter {
     }
 
     public boolean deleteEntityFromDB(Integer id) {
-        String delete = "DELETE FROM MOVIES WHERE ID = '"+ id +"';";
+        String delete = "DELETE FROM movies WHERE id = '"+ id +"';";
         try {
             statement = connection.createStatement();
             statement.execute(delete);
@@ -95,5 +98,35 @@ public class DBWriter {
     public void deleteMultipleEntitiesFromDB(Set<Integer> ids) {
         for (Integer id : ids)
             deleteEntityFromDB(id);
+    }
+
+    public String registerNewUser(String username, String password) {
+        String select = "SELECT * FROM users WHERE username = '" + username + "';";
+        String insert = "INSERT INTO users VALUES ('" + username + "', '" + password + "');";
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(select);
+            if (rs.next())
+                return "Имя пользователя '" + username + "' уже занято.";
+            statement.execute(insert);
+            return "Регистрация прошла успешно!";
+        } catch (SQLException e) {
+            return "Внутренняя ошибка сервера... Повторите попытку позднее.";
+        }
+    }
+
+    public Set<Integer> composeUserIdsToDelete(String username) {
+        Set<Integer> idsToDelete = new HashSet<>();
+        String select = "SELECT * FROM movies WHERE username = '" + username + "';";
+        try {
+            statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(select);
+            while (rs.next()) {
+                idsToDelete.add(Integer.parseInt(rs.getString("id")));
+            }
+            return idsToDelete;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }

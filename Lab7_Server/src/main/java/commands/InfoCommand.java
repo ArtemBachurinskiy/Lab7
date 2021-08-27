@@ -25,7 +25,7 @@ public class InfoCommand implements ServerCommand {
                 '\n' + "Тип : " + collectionManager.getCollectionType() +
                 '\n' + "Дата иниацилизации : " + collectionManager.getCollectionCreationDate() +
                 '\n' + "Количество элементов : " + collectionManager.getCollectionSize();
-        return new Response(request.getCommand(), message);
+        return new Response(request.getCommand(), message, true);
     }
 
     public String getDescription() {

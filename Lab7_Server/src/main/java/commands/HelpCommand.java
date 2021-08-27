@@ -28,7 +28,7 @@ public class HelpCommand implements ServerCommand {
         commandNames.forEach(commandName -> message.append(commandsOfClient.get(commandName).getDescription())
                                                     .append("\n"));
 
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {

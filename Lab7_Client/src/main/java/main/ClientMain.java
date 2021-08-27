@@ -8,7 +8,7 @@ import application.Application;
  * @author Artem Bachurinskiy
  **/
 public class ClientMain {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Application application = new ClientApplication();
         application.start(args);
     }

@@ -17,10 +17,12 @@ import java.util.Map;
 public class UpdateCommand implements ServerCommand {
     private CollectionManager collectionManager;
     private DBWriter dbWriter;
+    private DBReader dbReader;
 
     UpdateCommand(CollectionManager collectionManager, DBWriter dbWriter, DBReader dbReader) {
         this.collectionManager = collectionManager;
         this.dbWriter = dbWriter;
+        this.dbReader = dbReader;
     }
 
     //todo: lambda
@@ -40,10 +42,12 @@ public class UpdateCommand implements ServerCommand {
             for (Map.Entry<String, Movie> element : elements)
                 if (element.getValue().getId().equals(id)) {
                     found = true;
+                    if (dbReader.userIsDenied(id, request.getUsername()))
+                        return new Response(request.getCommand(), "Пользователь '" + request.getUsername() + "' не может модифицировать запись, созданную другим пользователем.", true);
                     message.append("Обновляем поля элемента БД...\n");
                     boolean updated = dbWriter.updateEntityOfDB(id, request.getMovie());
                     if (updated) {
-                        message.append("Объект БД успешно обновлён!");
+                        message.append("Объект БД успешно обновлён! БД и коллекция синхронизированы.");
                         collectionManager.deleteMovieById(id);
                         collectionManager.insertMovie(request.getMovie().getName(), request.getMovie());
                     }
@@ -51,13 +55,13 @@ public class UpdateCommand implements ServerCommand {
                         message.append("Не удалось обновить объект БД...");
                 }
             if (!found)
-                message.append("Элемента с id = ").append(request.getArgument()).append(" нет.");
+                message.append("Элемента с id = ").append(request.getArgument()).append(" не существует.");
         }
         else
             message.append("Необходимо задать аргумент!");
 
 
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {

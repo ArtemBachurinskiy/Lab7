@@ -1,5 +1,7 @@
 package connect;
 
+import output.OutputManager;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,19 +11,24 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
 public class ServerConnectionManager {
+    private OutputManager outputManager;
     private ServerSocketChannel serverSocketChannel;
     private SocketChannel communicationSocketChannel;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
     private boolean needNewStreams;
 
-    public ServerConnectionManager() {
+    public ServerConnectionManager(OutputManager outputManager, String port) {
+        this.outputManager = outputManager;
         try {
             serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.socket().bind(new InetSocketAddress(13579));
+            serverSocketChannel.socket().bind(new InetSocketAddress(Integer.parseInt(port)));
             serverSocketChannel.configureBlocking(false);
             communicationSocketChannel = null;
             needNewStreams = true;
+        } catch (NumberFormatException e) {
+            outputManager.printlnErrorMessage("Указанный порт для подключения к клиенту не преобразуется к типу int.");
+            System.exit(0);
         } catch (IOException e) {
         }
     }

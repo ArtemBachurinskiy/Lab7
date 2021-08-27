@@ -30,7 +30,7 @@ public class HistoryCommand implements ServerCommand {
                     .append(commandsOfClientHistory.size())
                     .append(") :\n");
         commandsOfClientHistory.forEach(command -> message.append(command).append('\n'));
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {

@@ -31,9 +31,9 @@ public class ShowCommand implements ServerCommand {
             message.append("Элементы коллекции : \n");
             collectionManager.getMoviesStream()
                             .sorted(Comparator.comparing(Movie::getName))
-                            .forEachOrdered(movie -> message.append(movie).append("\n"));
+                            .forEachOrdered(movie -> message.append("key [").append(movie.getName()).append("] -> ").append(movie).append("\n"));
         }
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {

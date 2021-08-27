@@ -29,7 +29,7 @@ public class PrintAscendingCommand implements ServerCommand {
                 .sorted(Comparator.comparingInt(Movie::getId))
                 .map(movie -> movie.toString().concat("\n"))
                 .forEachOrdered(message::append);
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {

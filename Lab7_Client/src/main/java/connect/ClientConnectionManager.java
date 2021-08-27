@@ -17,13 +17,17 @@ public class ClientConnectionManager {
     private ObjectInputStream objectInputStream;
     private OutputManager outputManager;
     private boolean messageIsPrinted = false;
+    private String address;
+    private String port;
 
     /**
      * @param outputManager менеджер вывода данных
      */
-    public ClientConnectionManager(OutputManager outputManager) {
+    public ClientConnectionManager(OutputManager outputManager, String[] args) {
         this.outputManager = outputManager;
         clientSocket = new Socket();
+        address = args[0];
+        port = args[1];
     }
 
     /**
@@ -31,13 +35,13 @@ public class ClientConnectionManager {
      */
     public void askForConnection() {
         try {
-            clientSocket = new Socket(InetAddress.getLocalHost(), 13579);
+            clientSocket = new Socket(InetAddress.getByName(address), Integer.parseInt(port));
             objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
             objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
             outputManager.printlnMessage("Соединение с сервером установлено.");
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             if (!messageIsPrinted) {
-                outputManager.printlnErrorMessage("Не удалось установить соединение с сервером ...");
+                outputManager.printlnErrorMessage("Не удалось установить соединение с сервером...");
                 messageIsPrinted = true;
             }
         }

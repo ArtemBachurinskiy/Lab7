@@ -38,16 +38,24 @@ public class ClientApplication implements Application {
     public void start(String[] args) {
         this.inputManager = new ConsoleInputManager(new BufferedReader(new InputStreamReader(System.in)));
         OutputManager outputManager = new ConsoleOutputManager();
+
+        if (args.length < 2) {
+            outputManager.printlnErrorMessage("IP-адрес сервера (args[0]) и порт сервера (args[1]) " +
+                    "должны передаваться клиенту как аргументы командной строки.");
+            System.exit(0);
+        }
+
         Validator validator = new Validator(outputManager);
         PersonReader personReader = new ConsolePersonReader(inputManager, outputManager, validator);
         MovieReader movieReader = new ConsoleMovieReader(inputManager, outputManager, validator);
         PersonBuilder personBuilder = new ConsolePersonBuilder(personReader);
         MovieBuilder movieBuilder = new ConsoleMovieBuilder(movieReader, personBuilder);
         ScriptFilesManager scriptFilesManager = new ScriptFilesManager();
-        this.clientConnectionManager = new ClientConnectionManager(outputManager);
+        this.clientConnectionManager = new ClientConnectionManager(outputManager, args);
         ClientRequestSender clientRequestSender = new ClientRequestSender(clientConnectionManager, outputManager);
         ClientResponseReceiver clientResponseReceiver = new ClientResponseReceiver(clientConnectionManager);
-        this.commandManager = new ClientCommandManager(this, outputManager, scriptFilesManager, clientConnectionManager, clientRequestSender, clientResponseReceiver, movieBuilder);
+        this.commandManager = new ClientCommandManager(this, outputManager, inputManager, scriptFilesManager, clientConnectionManager,
+                clientRequestSender, clientResponseReceiver, movieBuilder);
         loop();
     }
 

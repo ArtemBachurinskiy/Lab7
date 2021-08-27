@@ -66,7 +66,7 @@ public class ExecuteScriptCommand implements ClientCommand {
             else {
                 scriptFilesManager.getUsedScriptFiles().add(scriptName);
                 InputManager inputManager = new ScriptInputManager(new Scanner(new FileReader(scriptFile)));
-                ClientCommandManager commandManager = new ClientCommandManager(application, outputManager, scriptFilesManager, clientConnectionManager, clientRequestSender, clientResponseReceiver, movieBuilder);
+                ClientCommandManager commandManager = new ClientCommandManager(application, outputManager, inputManager, scriptFilesManager, clientConnectionManager, clientRequestSender, clientResponseReceiver, movieBuilder);
                 String fullCommand;
                 String command;
                 String argument;

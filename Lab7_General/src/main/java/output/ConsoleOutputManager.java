@@ -6,6 +6,12 @@ package output;
 public class ConsoleOutputManager implements OutputManager {
 
     @Override
+    public void printMessage(String message) {
+        System.out.print(message);
+        System.out.flush();
+    }
+
+    @Override
     public void printlnMessage(String message) {
         System.out.println(message);
         System.out.flush();

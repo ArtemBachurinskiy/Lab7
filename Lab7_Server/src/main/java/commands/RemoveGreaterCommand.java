@@ -33,9 +33,12 @@ public class RemoveGreaterCommand implements ServerCommand {
 
         if (!request.getArgument().isEmpty()) {
             if (idIsFound(id)) {
-                dbWriter.deleteMultipleEntitiesFromDB(composeIdsToDelete(id));
-                removeCorrespondingIds(id);
-                message = "Элементы успешно удалены из БД! БД и коллекция синхронизированы.";
+                Set<Integer> notFilteredIds = dbWriter.composeUserIdsToDelete(request.getUsername());
+                Set<Integer> filteredIds = filterByCommandMeaning(notFilteredIds, id);
+
+                dbWriter.deleteMultipleEntitiesFromDB(filteredIds);
+                removeCorrespondingCollectionIds(filteredIds);
+                message = "Требуемые эл-ты пользователя '" + request.getUsername() + "' успешно удалены из БД! БД и коллекция синхронизированы.";
             }
             else
                 message = "В коллекции нет элемента с id = " + id + "!";
@@ -43,7 +46,7 @@ public class RemoveGreaterCommand implements ServerCommand {
         else
             message = "Необходимо задать аргумент!";
 
-        return new Response(request.getCommand(), message);
+        return new Response(request.getCommand(), message, true);
     }
 
     boolean idIsFound(Integer id) {
@@ -55,24 +58,19 @@ public class RemoveGreaterCommand implements ServerCommand {
         return false;
     }
 
-    Set<Integer> composeIdsToDelete(Integer id) {
-        Set<Integer> idsToDelete = new HashSet<>();
-        ArrayList<Map.Entry<String, Movie>> elements = collectionManager.getCollectionElements();
-        for (Map.Entry<String, Movie> element : elements) {
-            if (element.getValue().getId() > id) {
-                idsToDelete.add(element.getValue().getId());
+    Set<Integer> filterByCommandMeaning(Set<Integer> notFilteredIds, Integer id) {
+        Set<Integer> filteredIds = new HashSet<>();
+        for (Integer possibleId : notFilteredIds) {
+            if (possibleId > id) {
+                filteredIds.add(possibleId);
             }
         }
-        return idsToDelete;
+        return filteredIds;
     }
 
-    void removeCorrespondingIds(Integer id) {
-        Iterator<Map.Entry<String, Movie>> iterator = collectionManager.getCollectionElements().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Movie> element = iterator.next();
-            if (element.getValue().getId() > id) {
-                collectionManager.deleteMovieById(element.getValue().getId());
-            }
+    void removeCorrespondingCollectionIds(Set<Integer> filteredIds) {
+        for (Integer id : filteredIds) {
+            collectionManager.deleteMovieById(id);
         }
     }
 

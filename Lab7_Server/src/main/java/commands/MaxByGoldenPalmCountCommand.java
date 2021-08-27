@@ -31,7 +31,7 @@ public class MaxByGoldenPalmCountCommand implements ServerCommand {
         }
         else
             message = "В коллекции нет элементов!";
-        return new Response(request.getCommand(), message);
+        return new Response(request.getCommand(), message, true);
     }
 
     public String getDescription() {

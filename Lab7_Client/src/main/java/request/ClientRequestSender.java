@@ -40,15 +40,4 @@ public class ClientRequestSender {
             return false;
         }
     }
-
-    /**
-     * Метод, предназначенный для создания нового запроса.
-     * @param command команда, входящая в запрос.
-     * @param argument аргумент, входящий в запрос.
-     * @param movie объект типа Movie, входящий в запрос.
-     * @return новый запрос (объект типа Request)
-     */
-    public Request createRequest (String command, String argument, Movie movie) {
-        return new Request(command, argument, movie);
-    }
 }

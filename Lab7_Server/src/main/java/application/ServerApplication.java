@@ -42,10 +42,17 @@ public class ServerApplication implements Application {
         this.outputManager = new ConsoleOutputManager();
         this.inputManager = new ConsoleInputManager(new BufferedReader(new InputStreamReader(System.in)));
 
+        if (args.length < 1) {
+            outputManager.printlnErrorMessage("Порт для подключения к клиенту (args[0]) " +
+                    "должен передаваться серверу как аргумент командной строки.");
+            System.exit(0);
+        }
+
         DBConnector dbConnector = new DBConnector(outputManager);
         dbConnector.connect();
 
         DBManager dbManager = new DBManager(dbConnector, outputManager);
+        dbManager.createDBUsersTableIfNotExists();
         dbManager.createDBEntitiesTableIfNotExists();
 
         CollectionManager collectionManager = new CollectionManager(dbManager);
@@ -55,7 +62,7 @@ public class ServerApplication implements Application {
 
         DBWriter dbWriter = new DBWriter(dbConnector);
 
-        this.serverConnectionManager = new ServerConnectionManager();
+        this.serverConnectionManager = new ServerConnectionManager(outputManager, args[0]);
         this.serverRequestReceiver = new ServerRequestReceiver(serverConnectionManager);
         this.serverResponseSender = new ServerResponseSender(serverConnectionManager, outputManager);
         this.serverCommandManager = new ServerCommandManager(this, outputManager, collectionManager, dbWriter, dbReader, dbConnector);

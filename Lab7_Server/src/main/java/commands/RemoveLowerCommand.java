@@ -22,25 +22,20 @@ public class RemoveLowerCommand extends RemoveGreaterCommand implements ServerCo
     }
 
     @Override
-    Set<Integer> composeIdsToDelete(Integer id) {
-        Set<Integer> idsToDelete = new HashSet<>();
-        ArrayList<Map.Entry<String, Movie>> elements = collectionManager.getCollectionElements();
-        for (Map.Entry<String, Movie> element : elements) {
-            if (element.getValue().getId() < id) {
-                idsToDelete.add(element.getValue().getId());
+    Set<Integer> filterByCommandMeaning(Set<Integer> notFilteredIds, Integer id) {
+        Set<Integer> filteredIds = new HashSet<>();
+        for (Integer possibleId : notFilteredIds) {
+            if (possibleId < id) {
+                filteredIds.add(possibleId);
             }
         }
-        return idsToDelete;
+        return filteredIds;
     }
 
     @Override
-    void removeCorrespondingIds(Integer id) {
-        Iterator<Map.Entry<String, Movie>> iterator = collectionManager.getCollectionElements().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Movie> element = iterator.next();
-            if (element.getValue().getId() < id) {
-                collectionManager.deleteMovieById(element.getValue().getId());
-            }
+    void removeCorrespondingCollectionIds(Set<Integer> filteredIds) {
+        for (Integer id : filteredIds) {
+            collectionManager.deleteMovieById(id);
         }
     }
 

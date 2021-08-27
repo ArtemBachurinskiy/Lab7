@@ -26,7 +26,7 @@ public class InsertCommand implements ServerCommand {
     public Response execute(Request request) {
         String message;
         if (!request.getArgument().isEmpty()) {
-            boolean inserted = dbWriter.insertEntityIntoDB(request.getMovie());
+            boolean inserted = dbWriter.insertEntityIntoDB(request.getMovie(), request.getUsername());
             if (inserted) {
                 message = "Объект успешно добавлен в БД! БД и коллекция синхронизированы.";
                 Movie movie = dbReader.getMovieWithMaxId();
@@ -38,7 +38,7 @@ public class InsertCommand implements ServerCommand {
         }
         else
             message = "Необходимо задать аргумент!";
-        return new Response(request.getCommand(), message);
+        return new Response(request.getCommand(), message, true);
     }
 
     public String getDescription() {

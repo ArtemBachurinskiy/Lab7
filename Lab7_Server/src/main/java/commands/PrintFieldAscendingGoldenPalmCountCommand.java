@@ -26,7 +26,7 @@ public class PrintFieldAscendingGoldenPalmCountCommand implements ServerCommand 
                 .sorted((movie1, movie2) -> (int) (movie1.getGoldenPalmCount() - movie2.getGoldenPalmCount()))
                 .map(movie -> String.valueOf(movie.getGoldenPalmCount()).concat("\n"))
                 .forEachOrdered(message::append);
-        return new Response(request.getCommand(), message.toString());
+        return new Response(request.getCommand(), message.toString(), true);
     }
 
     public String getDescription() {
