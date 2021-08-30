@@ -12,9 +12,11 @@ import java.util.Set;
 public class DBWriter {
     private Connection connection;
     private Statement statement;
+    private PasswordProtector passwordProtector;
 
-    public DBWriter (DBConnector dbConnector) {
+    public DBWriter (DBConnector dbConnector, PasswordProtector passwordProtector) {
         this.connection = dbConnector.getConnection();
+        this.passwordProtector = passwordProtector;
     }
 
     public boolean clearDBEntitiesTable() {
@@ -102,7 +104,7 @@ public class DBWriter {
 
     public String registerNewUser(String username, String password) {
         String select = "SELECT * FROM users WHERE username = '" + username + "';";
-        String insert = "INSERT INTO users VALUES ('" + username + "', '" + password + "');";
+        String insert = "INSERT INTO users VALUES ('" + username + "', '" + passwordProtector.createMD5(password) + "');";
         try {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(select);

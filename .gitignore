@@ -1,2 +1,4 @@
 \build
 Movies.xml
+*.bin
+*.lock

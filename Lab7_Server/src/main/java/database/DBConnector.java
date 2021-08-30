@@ -18,9 +18,9 @@ public class DBConnector {
         this.connection = null;
         final String DB_DRIVER = "org.postgresql.Driver";
         final String DB_URL = "jdbc:postgresql://localhost:5432/studs";
+        //final String DB_URL = "jdbc:postgresql://77.234.194.2:5432/studs";
         final String USER = "postgres";
         final String PASSWORD = "admin";
-
         try {
             Class.forName(DB_DRIVER);
         } catch (ClassNotFoundException e) {

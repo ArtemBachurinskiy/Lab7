@@ -18,11 +18,13 @@ public class DBReader {
     private Statement statement;
     private OutputManager outputManager;
     private final String validateUserOK = "Успешный вход в систему!";
+    private PasswordProtector passwordProtector;
 
-    public DBReader (DBConnector dbConnector, CollectionManager collectionManager, OutputManager outputManager) {
+    public DBReader (DBConnector dbConnector, CollectionManager collectionManager, OutputManager outputManager, PasswordProtector passwordProtector) {
         this.connection = dbConnector.getConnection();
         this.collectionManager = collectionManager;
         this.outputManager = outputManager;
+        this.passwordProtector = passwordProtector;
     }
 
     public void readDBEntitiesTable() {
@@ -52,7 +54,7 @@ public class DBReader {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(select);
             if (rs.next()) {
-                if (password.equals(rs.getString("password")))
+                if (passwordProtector.createMD5(password).equals(rs.getString("password")))
                     return validateUserOK;
                 return "Имя пользователя или пароль неверны.";
             }
@@ -87,20 +89,6 @@ public class DBReader {
             return true;
         }
     }
-
-//    public Movie getMovieById(int id) {
-//        try {
-//            statement = connection.createStatement();
-//            ResultSet rs = statement.executeQuery("SELECT * FROM movies WHERE id = '" + id + "';");
-//            if (rs.next()) {
-//                return parseRsToMovie(rs);
-//            } else {
-//                return null;
-//            }
-//        } catch (SQLException e){
-//            return null;
-//        }
-//    }
 
     private Movie parseRsToMovie(ResultSet rs) {
         try {

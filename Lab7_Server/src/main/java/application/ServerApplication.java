@@ -3,10 +3,7 @@ package application;
 import collection.CollectionManager;
 import commands.ServerCommandManager;
 import connect.ServerConnectionManager;
-import database.DBConnector;
-import database.DBManager;
-import database.DBReader;
-import database.DBWriter;
+import database.*;
 import input.ConsoleInputManager;
 import input.InputManager;
 import output.ConsoleOutputManager;
@@ -56,11 +53,12 @@ public class ServerApplication implements Application {
         dbManager.createDBEntitiesTableIfNotExists();
 
         CollectionManager collectionManager = new CollectionManager(dbManager);
+        PasswordProtector passwordProtector = new PasswordProtector();
 
-        DBReader dbReader = new DBReader(dbConnector, collectionManager, outputManager);
+        DBReader dbReader = new DBReader(dbConnector, collectionManager, outputManager, passwordProtector);
         dbReader.readDBEntitiesTable();
 
-        DBWriter dbWriter = new DBWriter(dbConnector);
+        DBWriter dbWriter = new DBWriter(dbConnector, passwordProtector);
 
         this.serverConnectionManager = new ServerConnectionManager(outputManager, args[0]);
         this.serverRequestReceiver = new ServerRequestReceiver(serverConnectionManager);
