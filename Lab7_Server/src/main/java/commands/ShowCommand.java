@@ -14,9 +14,6 @@ import java.util.Comparator;
 public class ShowCommand implements ServerCommand {
     private CollectionManager collectionManager;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     ShowCommand (CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

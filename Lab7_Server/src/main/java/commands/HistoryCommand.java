@@ -29,7 +29,9 @@ public class HistoryCommand implements ServerCommand {
             message.append("Последние исполненные команды (")
                     .append(commandsOfClientHistory.size())
                     .append(") :\n");
-        commandsOfClientHistory.forEach(command -> message.append(command).append('\n'));
+        commandsOfClientHistory.forEach(command -> message
+                        .append(command)
+                        .append('\n'));
         return new Response(request.getCommand(), message.toString(), true);
     }
 

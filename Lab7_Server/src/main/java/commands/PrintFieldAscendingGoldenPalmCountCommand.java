@@ -11,9 +11,6 @@ import response.Response;
 public class PrintFieldAscendingGoldenPalmCountCommand implements ServerCommand {
     private CollectionManager collectionManager;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     PrintFieldAscendingGoldenPalmCountCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

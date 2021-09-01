@@ -23,8 +23,8 @@ public class HelpCommand implements ServerCommand {
     public Response execute(Request request) {
         StringBuilder message = new StringBuilder();
         message.append("Справка по доступным командам!\n")
-                .append("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.\n")
-                .append("exit : завершить программу (без сохранения в файл)\n");
+                .append("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме\n")
+                .append("exit : завершить работу клиентского приложения\n");
         commandNames.forEach(commandName -> message.append(commandsOfClient.get(commandName).getDescription())
                                                     .append("\n"));
 

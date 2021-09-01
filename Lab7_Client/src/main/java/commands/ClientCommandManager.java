@@ -33,16 +33,6 @@ public class ClientCommandManager {
     private String username;
     private String password;
 
-    /**
-     * Конструктор класса ClientCommandManager.
-     * @param application объект данного клиентского приложения
-     * @param outputManager менеджер вывода данных
-     * @param scriptFilesManager менеджер по управлению файлами-скриптами
-     * @param clientConnectionManager клиентский менеджер установки соединения
-     * @param clientRequestSender клиенткий менеджер отправки запросов
-     * @param clientResponseReceiver клиенткий менеджер получения ответов
-     * @param movieBuilder объект, предназначенный для создания объекта Movie
-     */
     public ClientCommandManager(ClientApplication application, OutputManager outputManager, InputManager inputManager,
                                 ScriptFilesManager scriptFilesManager, ClientConnectionManager clientConnectionManager,
                                 ClientRequestSender clientRequestSender, ClientResponseReceiver clientResponseReceiver,

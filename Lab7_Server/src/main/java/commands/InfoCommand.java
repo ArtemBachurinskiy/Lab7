@@ -12,9 +12,6 @@ import response.Response;
 public class InfoCommand implements ServerCommand {
     private CollectionManager collectionManager;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     InfoCommand (CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

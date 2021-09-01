@@ -16,9 +16,6 @@ public class RemoveKeyCommand implements ServerCommand {
     private DBWriter dbWriter;
     private DBReader dbReader;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     RemoveKeyCommand(CollectionManager collectionManager, DBWriter dbWriter, DBReader dbReader) {
         this.collectionManager = collectionManager;
         this.dbWriter = dbWriter;

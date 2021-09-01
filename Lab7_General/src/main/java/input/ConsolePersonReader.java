@@ -20,11 +20,6 @@ public class ConsolePersonReader implements PersonReader {
     private OutputManager outputManager;
     private Validator validator;
 
-    /**
-     * @param inputManager менеджер ввода данных
-     * @param outputManager менеджер вывода данных
-     * @param validator объект типа Validator, предназначенный для валидации введённых полей
-     */
     public ConsolePersonReader(InputManager inputManager, OutputManager outputManager, Validator validator) {
         this.inputManager = inputManager;
         this.outputManager = outputManager;

@@ -14,9 +14,6 @@ import java.util.Comparator;
 public class PrintAscendingCommand implements ServerCommand {
     private CollectionManager collectionManager;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     PrintAscendingCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

@@ -96,8 +96,7 @@ public class ClientApplication implements Application {
     }
 
     /**
-     * @return true если мы хотим завершить работу клиентского приложения,
-     *         false в противном случае
+     * @return true если мы хотим завершить работу клиентского приложения, false в противном случае.
      */
     public boolean exitIsSet() {
         return exit;

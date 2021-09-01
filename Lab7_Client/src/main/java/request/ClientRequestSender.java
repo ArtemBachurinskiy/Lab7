@@ -14,11 +14,6 @@ public class ClientRequestSender {
     private ClientConnectionManager clientConnectionManager;
     private OutputManager outputManager;
 
-    /**
-     * Конструктор ClientRequestSender.
-     * @param clientConnectionManager клиентский менеджер установки соединения
-     * @param outputManager менеджер вывода данных
-     */
     public ClientRequestSender(ClientConnectionManager clientConnectionManager, OutputManager outputManager) {
         this.clientConnectionManager = clientConnectionManager;
         this.outputManager = outputManager;
@@ -27,8 +22,7 @@ public class ClientRequestSender {
     /**
      * Метод, который посылает запрос серверу.
      * @param request посылаемый запрос
-     * @return true если запрос успешно отправлен,
-     *         false если не удалось отправить запрос.
+     * @return true если запрос успешно отправлен, false если не удалось отправить запрос.
      */
     public boolean sendRequestToServer(Request request) {
         try {

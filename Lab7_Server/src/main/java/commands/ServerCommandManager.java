@@ -16,13 +16,15 @@ public class ServerCommandManager {
     private DBReader dbReader;
     private Map<String, ServerCommand> commandsOfClient;
     private Map<String, ServerCommand> commandsOfServer;
-    private List<String> commandsOfClientHistory = new ArrayList<>();
+    private List<String> commandsOfClientHistory;
     private final int LIMIT = 9;
 
     public ServerCommandManager(ServerApplication application, OutputManager outputManager, CollectionManager collectionManager,
                                 DBWriter dbWriter, DBReader dbReader, DBConnector dbConnector) {
         this.outputManager = outputManager;
         this.dbReader = dbReader;
+        commandsOfClientHistory = new ArrayList<>();
+
         commandsOfClient = new HashMap<>();
         commandsOfClient.put("help", new HelpCommand(commandsOfClient.keySet(), commandsOfClient));
         commandsOfClient.put("info", new InfoCommand(collectionManager));
@@ -48,13 +50,7 @@ public class ServerCommandManager {
     // несколько. Но в БД всё отображается правильно. Если серверу не написать shutdown, то при подключении клиента так и будут выводится
     // неправильные эл-ты при исполнении команды show
 
-    //todo: команда history должна выводить историю только тех команд, которые вводит конкретный клиент (тот, кот. авторизовался)
-
-    //todo: команда help выводит устаревшую справку: нужно ОБНОВИТЬ МЕТОДЫ getDescription() в каждом классе команд.
-
     //todo: команда show должна выводить и имя пользователя в том числе(создавшего объект)
-
-    //todo: обновить JavaDoc, удалить очевидные комментарии (например комментарии к конструкторам)
 
     //todo: проверить, что работает команда execute_script правильно
 
@@ -76,7 +72,7 @@ public class ServerCommandManager {
                 if (!validationResult.equals(dbReader.getValidateUserOK()))
                     return new Response(null, validationResult, false);
             }
-            updateCommandsOfClientHistory(command);
+            updateCommandsOfClientHistory(command, request.getUsername());
             try {
                 ServerInvoker invoker = new ServerInvoker(commandsOfClient.get(command));
                 return invoker.executeCommand(request);
@@ -96,9 +92,9 @@ public class ServerCommandManager {
         }
     }
 
-    private void updateCommandsOfClientHistory(String command) {
+    private void updateCommandsOfClientHistory(String command, String username) {
         if (commandsOfClientHistory.size() < LIMIT)
-            commandsOfClientHistory.add(command);
+            commandsOfClientHistory.add(command + " (пользователь '"+ username +"')");
         else {
             commandsOfClientHistory.remove(0);
             commandsOfClientHistory.add(command);

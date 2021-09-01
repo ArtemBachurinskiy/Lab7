@@ -9,7 +9,7 @@ import response.Response;
 import java.util.*;
 
 /**
- * Класс комнады remove_greater.
+ * Класс команды remove_greater.
  * Описание команды: удалить из коллекции все элементы, превышающие заданный
  * (удаляются те элементы, id которых больше, чем заданный)
  */
@@ -17,9 +17,6 @@ public class RemoveGreaterCommand implements ServerCommand {
     CollectionManager collectionManager;
     DBWriter dbWriter;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     RemoveGreaterCommand(CollectionManager collectionManager, DBWriter dbWriter) {
         this.collectionManager = collectionManager;
         this.dbWriter = dbWriter;
@@ -75,6 +72,7 @@ public class RemoveGreaterCommand implements ServerCommand {
     }
 
     public String getDescription() {
-        return "remove_greater {element} : удалить из коллекции все элементы, превышающие заданный";
+        return "remove_greater {element} : удалить из коллекции все элементы, превышающие заданный " +
+                "(удаляются те элементы, id которых больше, чем заданный)";
     }
 }

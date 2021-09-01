@@ -16,12 +16,7 @@ public interface MovieBuilder {
     long buildGoldenPalmCount();
     String buildTagline() throws IOException;
     MovieGenre buildGenre();
-    /**
-     * @param id поле id объекта Movie.
-     * @param name поле name объекта Movie.
-     * @return новый объект типа Movie
-     */
-    Movie buildMovie(int id, String name) throws IOException;
 
+    Movie buildMovie(int id, String name) throws IOException;
     Movie buildMovie(int id) throws IOException;
 }

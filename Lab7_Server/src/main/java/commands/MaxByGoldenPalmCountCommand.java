@@ -14,9 +14,6 @@ import java.util.Comparator;
 public class MaxByGoldenPalmCountCommand implements ServerCommand {
     private CollectionManager collectionManager;
 
-    /**
-     * @param collectionManager менеджер коллекции
-     */
     MaxByGoldenPalmCountCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

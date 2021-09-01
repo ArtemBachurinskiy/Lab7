@@ -13,11 +13,6 @@ public class ConsoleMovieReader implements MovieReader {
     private OutputManager outputManager;
     private Validator validator;
 
-    /**
-     * @param inputManager менеджер ввода данных
-     * @param outputManager менеджер вывода данных
-     * @param validator объект типа Validator, предназначенный для валидации введённых полей
-     */
     public ConsoleMovieReader(InputManager inputManager, OutputManager outputManager, Validator validator) {
         this.inputManager = inputManager;
         this.outputManager = outputManager;

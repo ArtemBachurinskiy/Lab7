@@ -29,15 +29,6 @@ public class ExecuteScriptCommand implements ClientCommand {
     private ClientResponseReceiver clientResponseReceiver;
     private MovieBuilder movieBuilder;
 
-    /**
-     * @param application объект данного клиентского приложения
-     * @param outputManager менеджер вывода данных
-     * @param scriptFilesManager менеджер по управлению файлами-скриптами
-     * @param clientConnectionManager клиентский менеджер установки соединения
-     * @param clientRequestSender клиенткий менеджер отправки запросов
-     * @param clientResponseReceiver клиенткий менеджер получения ответов
-     * @param movieBuilder объект, предназначенный для создания объекта Movie
-     */
     ExecuteScriptCommand(ClientApplication application, OutputManager outputManager, ScriptFilesManager scriptFilesManager,
                          ClientConnectionManager clientConnectionManager, ClientRequestSender clientRequestSender,
                          ClientResponseReceiver clientResponseReceiver, MovieBuilder movieBuilder) {

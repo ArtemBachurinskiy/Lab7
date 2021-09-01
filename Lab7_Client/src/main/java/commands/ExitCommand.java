@@ -9,9 +9,6 @@ import application.ClientApplication;
 public class ExitCommand implements ClientCommand {
     private ClientApplication application;
 
-    /**
-     * @param application объект данного клиентского приложения
-     */
     ExitCommand (ClientApplication application) {
         this.application = application;
     }

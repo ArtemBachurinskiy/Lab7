@@ -14,9 +14,7 @@ import java.util.*;
  * (удаляются те элементы, id которых меньше, чем заданный)
  */
 public class RemoveLowerCommand extends RemoveGreaterCommand implements ServerCommand {
-    /**
-     * @param collectionManager менеджер коллекции
-     */
+
     RemoveLowerCommand(CollectionManager collectionManager, DBWriter dbWriter) {
         super(collectionManager, dbWriter);
     }
@@ -41,6 +39,7 @@ public class RemoveLowerCommand extends RemoveGreaterCommand implements ServerCo
 
     @Override
     public String getDescription() {
-        return "remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный";
+        return "remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный " +
+                "(удаляются те элементы, id которых меньше, чем заданный)";
     }
 }

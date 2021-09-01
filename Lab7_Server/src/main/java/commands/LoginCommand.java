@@ -4,6 +4,11 @@ import database.DBReader;
 import request.Request;
 import response.Response;
 
+
+/**
+ * Класс команды login.
+ * Описание команды: войти в систему
+ */
 public class LoginCommand implements ServerCommand{
     private DBReader dbReader;
 
@@ -17,7 +22,6 @@ public class LoginCommand implements ServerCommand{
     }
 
     @Override
-    public String getDescription() {
-        return null;
+    public String getDescription() { return "login : войти в систему";
     }
 }

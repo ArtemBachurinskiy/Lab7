@@ -20,9 +20,6 @@ public class ClientConnectionManager {
     private String address;
     private String port;
 
-    /**
-     * @param outputManager менеджер вывода данных
-     */
     public ClientConnectionManager(OutputManager outputManager, String[] args) {
         this.outputManager = outputManager;
         clientSocket = new Socket();
@@ -49,8 +46,7 @@ public class ClientConnectionManager {
 
     /**
      * Метод, который проверяет, установлено ли соединения с сервером.
-     * @return true если соединение установлено,
-     *         false в противном случае.
+     * @return true если соединение установлено, false в противном случае.
      */
     public boolean connectionIsEstablished () {
         return clientSocket.isConnected() && (!clientSocket.isClosed());

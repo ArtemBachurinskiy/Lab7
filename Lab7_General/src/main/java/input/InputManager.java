@@ -15,8 +15,7 @@ public interface InputManager {
 
     /**
      * Проверяет, имеется ли следующая строка для чтения.
-     * @return true если есть следующая строка для чтения,
-     *         false в противном случае.
+     * @return true если есть следующая строка для чтения, false в противном случае.
      */
     boolean readyToRead() throws IOException;
 }

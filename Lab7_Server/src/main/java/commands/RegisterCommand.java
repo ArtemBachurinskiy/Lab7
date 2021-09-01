@@ -4,6 +4,10 @@ import database.DBWriter;
 import request.Request;
 import response.Response;
 
+/**
+ * Класс команды register.
+ * Описание команды: зарегистрировать нового пользователя
+ */
 public class RegisterCommand implements ServerCommand{
     private DBWriter dbWriter;
 
@@ -19,6 +23,6 @@ public class RegisterCommand implements ServerCommand{
 
     @Override
     public String getDescription() {
-        return null;
+        return "register : зарегистрировать нового пользователя";
     }
 }

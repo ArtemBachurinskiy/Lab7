@@ -16,6 +16,9 @@ import response.ServerResponseSender;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Класс серверного приложения.
@@ -28,6 +31,8 @@ public class ServerApplication implements Application {
     private ServerCommandManager serverCommandManager;
     private OutputManager outputManager;
     private boolean shutdown;
+    private ExecutorService receivingExecutor;
+    private ThreadPoolExecutor sendingExecutor;
 
     /**
      * Метод, который инициализирует нужные объекты и запускает главный цикл, реализуемый серверным приложением.
@@ -64,6 +69,10 @@ public class ServerApplication implements Application {
         this.serverRequestReceiver = new ServerRequestReceiver(serverConnectionManager);
         this.serverResponseSender = new ServerResponseSender(serverConnectionManager, outputManager);
         this.serverCommandManager = new ServerCommandManager(this, outputManager, collectionManager, dbWriter, dbReader, dbConnector);
+
+        receivingExecutor = Executors.newFixedThreadPool(10);
+        sendingExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+
         loop();
     }
 

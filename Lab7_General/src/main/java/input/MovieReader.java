@@ -10,16 +10,10 @@ import java.io.IOException;
 public interface MovieReader {
 
     String readName() throws IOException;
-
     Integer readCoordinateX() throws IOException;
-
     Double readCoordinateY();
-
     int readOscarsCount();
-
     long readGoldenPalmCount();
-
     String readTagline() throws IOException;
-
     MovieGenre readGenre();
 }

@@ -9,16 +9,10 @@ import java.util.Scanner;
 public class ScriptInputManager implements InputManager {
     private Scanner scanner;
 
-    /**
-     * @param scanner объект типа Scanner
-     */
     public ScriptInputManager(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    /**
-     * @return scanner.nextLine()
-     */
     @Override
     public String readLine() throws IOException {
         return scanner.nextLine();

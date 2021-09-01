@@ -8,9 +8,6 @@ import output.OutputManager;
 public class Validator {
     private OutputManager outputManager;
 
-    /**
-     * @param outputManager менеджер вывода данных
-     */
     public Validator (OutputManager outputManager) {
         this.outputManager = outputManager;
     }

@@ -6,15 +6,9 @@ import input.PersonReader;
 
 import java.io.IOException;
 
-/**
- * Класс, который строит объект типа Movie из консоли.
- */
 public class ConsolePersonBuilder implements PersonBuilder {
     private PersonReader personReader;
 
-    /**
-     * @param personReader Объект класса PersonReader, предназначенный для постройки объекта типа Person из консоли
-     */
     public ConsolePersonBuilder(PersonReader personReader) {
         this.personReader = personReader;
     }
@@ -35,10 +29,6 @@ public class ConsolePersonBuilder implements PersonBuilder {
         return personReader.readHairColor();
     };
 
-    /**
-     * Метод, создающий новый объект типа Person.
-     * @return новый объект типа Person
-     */
     public Person buildPerson() throws IOException {
         return new Person(buildName(), buildBirthday(), buildWeight(), buildPassportID(), buildHairColor());
     }

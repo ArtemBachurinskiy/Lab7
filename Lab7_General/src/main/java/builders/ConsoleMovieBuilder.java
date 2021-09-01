@@ -53,6 +53,7 @@ public class ConsoleMovieBuilder implements MovieBuilder {
     public MovieGenre buildGenre() {
         return movieReader.readGenre();
     }
+
     @Override
     public Movie buildMovie(int id, String name) throws IOException {
         return new Movie(id, name, buildCoordinates(), buildCreationDate(), buildOscarsCount(),
